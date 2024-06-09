@@ -8,15 +8,23 @@ import (
 
 
 func main(){
+	
+	// h2List:= []string{}
 	collector:=colly.NewCollector(
-		colly.AllowedDomains("en.wikipedia.org","github.com","x.com"),
+		colly.AllowedDomains("github.com","x.com"),
 		
 	)
 
-	collector.OnHTML("body",func(h *colly.HTMLElement) {
-		e:=h.ChildAttrs("h2","class")
-		fmt.Println(e)
+	collector.OnHTML("div",func(h *colly.HTMLElement) {
+		fmt.Println(h.Text)
 	})
+
+	collector.OnError(func(r *colly.Response, err error) {
+		fmt.Println("Error occurred : ",err)
+	})
+
+	
+
 
 	err:=collector.Visit("https://github.com/Numeez")
 	if err !=nil{
